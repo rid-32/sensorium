@@ -26,26 +26,59 @@ const plugins = [
 ]
 
 const jsxLoader = {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-            loader: 'babel-loader',
-            options: {
-                presets: ['react', 'env', 'stage-1'],
-                // plugins: ['transform-decorators-legacy'],
-            },
+    test: /\.(js|jsx)$/,
+    exclude: /node_modules/,
+    use: {
+        loader: 'babel-loader',
+        options: {
+            presets: ['react', 'env', 'stage-1'],
+            plugins: ['transform-decorators-legacy'],
         },
     },
-    svgInlineLoader = {
-        test: /\.inlinesvg$/,
-        loader: 'svg-inline-loader',
+}
+
+const cssLoader = {
+    test: /\.(s)?css$/,
+    use: [
+        {
+            loader: is_dev ? 'style-loader' : MiniCssExtractPlugin.loader,
+        },
+        {
+            loader: 'css-loader',
+            query: {
+                modules: true,
+                importLoaders: 1,
+            },
+        },
+        'postcss-loader',
+        'sass-loader',
+    ],
+}
+
+const svgInlineLoader = {
+    test: /\.inlinesvg$/,
+    loader: 'svg-inline-loader',
+}
+
+const fileLoader = {
+    test: /\.(wav|webm|mp3|woff|woff2|ttf|eot|svg|png|jpe?g|gif|ico)(\?.*)?$/i,
+    use: {
+        loader: 'file-loader',
+        options: {
+            name: '[path][name].[hash].[ext]',
+            context: rootAssetPath,
+        },
     },
-    alias = {
-        Assets: path.resolve(__dirname, 'assets'),
-        UI: path.resolve(__dirname, 'src/UI'),
-        Stylesheets: path.resolve(__dirname, 'src/Stylesheets'),
-    },
-    extensions = ['.js', '.jsx', '.json', '.scss', '.css']
+}
+
+const alias = {
+    Assets: path.resolve(__dirname, 'assets'),
+    UI: path.resolve(__dirname, 'src/UI'),
+    Stylesheets: path.resolve(__dirname, 'src/Stylesheets'),
+    Models: path.resolve(__dirname, 'src/Models'),
+}
+
+const extensions = ['.js', '.jsx', '.json', '.scss', '.css']
 
 module.exports = {
     mode,
@@ -53,49 +86,20 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'build'),
         filename: '[name].[hash].js',
+        publicPath: '/',
     },
     resolve: {
         alias,
         extensions,
     },
     module: {
-        rules: [
-            jsxLoader,
-            {
-                test: /\.(s)?css$/,
-                use: [
-                    {
-                        loader: is_dev
-                            ? 'style-loader'
-                            : MiniCssExtractPlugin.loader,
-                    },
-                    {
-                        loader: 'css-loader',
-                        query: {
-                            modules: true,
-                            importLoaders: 1,
-                        },
-                    },
-                    'postcss-loader',
-                    'sass-loader',
-                ],
-            },
-            svgInlineLoader,
-            {
-                //eslint-disable-next-line
-                test: /\.(wav|webm|mp3|woff|woff2|ttf|eot|svg|png|jpe?g|gif|ico)(\?.*)?$/i,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[path][name].[hash].[ext]',
-                        context: rootAssetPath,
-                    },
-                },
-            },
-        ],
+        rules: [jsxLoader, cssLoader, svgInlineLoader, fileLoader],
     },
     plugins,
     optimization: {
         minimizer: [new OptimizeCSSAssetsPlugin({})],
+    },
+    devServer: {
+        historyApiFallback: true,
     },
 }

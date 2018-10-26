@@ -19,6 +19,7 @@
         "babel-preset-react": "^6.24.1",
         "babel-preset-stage-1": "^6.24.1",
         "clean-webpack-plugin": "^0.1.19",
+        "config": "^2.0.1",
         "config-webpack": "^1.0.4",
         "cross-env": "^5.2.0",
         "css-loader": "^1.0.0",
@@ -39,8 +40,11 @@
         "webpack-dev-server": "^3.1.9"
     },
     "dependencies": {
-        "config": "^2.0.1",
+        "@rematch/core": "^1.0.6",
+        "history": "^4.7.2",
         "react": "^16.5.2",
-        "react-dom": "^16.5.2"
+        "react-dom": "^16.5.2",
+        "react-router-config": "^4.4.0-beta.1",
+        "react-router-dom": "^4.3.1"
     }
 }
