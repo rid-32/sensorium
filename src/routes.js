@@ -9,6 +9,7 @@ const routes = [
     },
     {
         component: PrimaryContainer,
+        path: '/',
         routes: [
             {
                 path: '/',

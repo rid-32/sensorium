@@ -31,7 +31,7 @@ const jsxLoader = {
     use: {
         loader: 'babel-loader',
         options: {
-            presets: ['react', 'env', 'stage-1'],
+            presets: ['react', 'env', 'stage-0'],
             plugins: ['transform-decorators-legacy'],
         },
     },
@@ -76,13 +76,17 @@ const alias = {
     UI: path.resolve(__dirname, 'src/UI'),
     Stylesheets: path.resolve(__dirname, 'src/Stylesheets'),
     Models: path.resolve(__dirname, 'src/Models'),
+    AppRoutes: path.resolve(__dirname, 'src/routes'),
+    AppStore: path.resolve(__dirname, 'src/store'),
+    Utils: path.resolve(__dirname, 'src/Utils'),
+    Decorators: path.resolve(__dirname, 'src/Decorators'),
 }
 
 const extensions = ['.js', '.jsx', '.json', '.scss', '.css']
 
 module.exports = {
     mode,
-    entry: [path.join(__dirname, '/src/index.js')],
+    entry: ['babel-polyfill', path.join(__dirname, '/src/index.js')],
     output: {
         path: path.join(__dirname, 'build'),
         filename: '[name].[hash].js',
